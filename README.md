@@ -1,6 +1,6 @@
 # @wornpage/layout-surfaces
 
-Compact Svelte 5 panels, containers, cards, and dividers with named structure,
+Compact Svelte 5 panels, containers, cards, dividers, and resizable panes with named structure,
 hostile-content containment, visible focus, reduced-motion support, and
 standalone theme fallbacks.
 
@@ -24,7 +24,7 @@ bun add @wornpage/layout-surfaces
 
 ```svelte
 <script>
-  import { Card, Container, Divider, Panel } from '@wornpage/layout-surfaces';
+  import { Card, Container, Divider, Panel, Resizable } from '@wornpage/layout-surfaces';
 </script>
 
 <Panel sectionLabel="Delivery" heading="Launch readiness" headingLevel={2}>
@@ -41,6 +41,11 @@ bun add @wornpage/layout-surfaces
 </Card>
 
 <Divider label="Later" />
+
+<Resizable initialSize={180} label="Resize backlog pane">
+  <p>Backlog</p>
+  {#snippet content()}<p>In progress</p>{/snippet}
+</Resizable>
 ```
 
 ## Container
@@ -93,10 +98,34 @@ visible label wraps between the rules without widening its parent.
 |------|------|---------|-------------|
 | `label` | `string` | none | Optional visible separator label |
 
+## Resizable
+
+Resizable is a two-pane layout with a native ARIA separator contract. Pointer
+interaction focuses the separator, uses pointer capture, and clears on pointer
+up or cancellation. Arrow keys resize one step, while Home and End move to the
+declared bounds. The rail remains visible without hover and exposes a wider
+coarse-pointer hit area without widening the layout.
+
+Sizes snap to 20-pixel increments in the supported 100-800 pixel range. Grid
+tracks can still shrink in a compact parent so neither pane widens the page.
+`side="end"` places the resizable pane at the visual end and reverses the arrow
+direction accordingly.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `initialSize` | `number` | `280` | Initial pane width, snapped and clamped |
+| `minSize` | `number` | `180` | Minimum pane width |
+| `maxSize` | `number` | `480` | Maximum pane width |
+| `side` | `start \| end` | `start` | Visual side occupied by the resizable pane |
+| `label` | `string` | `Resize pane` | Accessible separator label |
+
+Slots: `children` (resizable pane), `content` (remaining pane).
+
 ## Theme tokens
 
 The components consume the existing `--cockpit-*` tokens with complete light
 fallbacks. Package-specific overrides use the `--worn-container-*`,
-`--worn-panel-*`, `--worn-card-*`, and `--worn-divider-*` prefixes. Outer spacing remains
+`--worn-panel-*`, `--worn-card-*`, `--worn-divider-*`, and
+`--worn-resizable-*` prefixes. Outer spacing remains
 explicitly tokenized through `--worn-container-margin-block-end` and
 `--worn-divider-margin-block` so a parent layout can set either to `0`.

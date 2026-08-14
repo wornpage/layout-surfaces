@@ -7,12 +7,13 @@ const container = read('Container');
 const card = read('Card');
 const divider = read('Divider');
 const panel = read('Panel');
+const resizable = read('Resizable');
 
 describe('@wornpage/layout-surfaces', () => {
 	it('declares one source-delivered v2 package', () => {
 		const pkg = require('../package.json');
 		expect(pkg.name).toBe('@wornpage/layout-surfaces');
-		expect(pkg.version).toBe('0.1.1');
+		expect(pkg.version).toBe('0.1.2');
 		expect(pkg.wornpage).toEqual({ contractVersion: 2, delivery: 'source' });
 		expect(pkg.main).toBe('./src/index.ts');
 		expect(pkg.files).not.toContain('dist');
@@ -20,8 +21,8 @@ describe('@wornpage/layout-surfaces', () => {
 
 	it('exports and compiles every layout surface without warnings', async () => {
 		const mod = await import('../src/index.ts');
-		expect(Object.keys(mod).sort()).toEqual(['Card', 'Container', 'Divider', 'Panel']);
-		for (const [name, source] of Object.entries({ Card: card, Container: container, Divider: divider, Panel: panel })) {
+		expect(Object.keys(mod).sort()).toEqual(['Card', 'Container', 'Divider', 'Panel', 'Resizable']);
+		for (const [name, source] of Object.entries({ Card: card, Container: container, Divider: divider, Panel: panel, Resizable: resizable })) {
 			const result = compile(source, { filename: `${name}.svelte`, generate: 'client' });
 			expect(result.warnings).toHaveLength(0);
 		}
@@ -84,5 +85,31 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(divider).toContain('max-inline-size: calc(100% - 40px);');
 		expect(divider).toContain('overflow-wrap: anywhere;');
 		expect(divider).toContain('flex: 0 1 auto;');
+	});
+
+	it('keeps the splitter focused and terminates every pointer lifecycle', () => {
+		expect(resizable).toContain('handle.focus({ preventScroll: true });');
+		expect(resizable).toContain('handle.setPointerCapture?.(event.pointerId);');
+		expect(resizable).toContain('onpointercancel={finishPointer}');
+		expect(resizable).toContain('onlostpointercapture={onLostPointerCapture}');
+		expect(resizable).toContain("event.key === 'ArrowLeft'");
+		expect(resizable).toContain("event.key === 'ArrowRight'");
+		expect(resizable).toContain("event.key === 'Home'");
+		expect(resizable).toContain("event.key === 'End'");
+	});
+
+	it('exposes a contained, theme-safe separator in both pane directions', () => {
+		expect(resizable).toContain('role="separator"');
+		expect(resizable).toContain('aria-controls={paneId}');
+		expect(resizable).toContain('aria-valuetext={`${paneSize} pixels`}');
+		expect(resizable).toContain("grid-template-areas: 'pane handle content';");
+		expect(resizable).toContain("grid-template-areas: 'content handle pane';");
+		expect(resizable).toContain('max-inline-size: 100%;');
+		expect(resizable).toContain('minmax(0, var(--worn-resizable-pane-size))');
+		expect(resizable).toContain('overflow-wrap: anywhere;');
+		expect(resizable).toContain('var(--cockpit-border-strong, #b8b0a5)');
+		expect(resizable).toContain('var(--cockpit-accent, #0f766e)');
+		expect(resizable).toContain('inset-inline: -16px;');
+		expect(resizable).toContain('@media (prefers-reduced-motion: reduce)');
 	});
 });
