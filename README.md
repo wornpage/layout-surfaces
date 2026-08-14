@@ -1,6 +1,6 @@
 # @wornpage/layout-surfaces
 
-Compact Svelte 5 containers, cards, and dividers with named structure,
+Compact Svelte 5 panels, containers, cards, and dividers with named structure,
 hostile-content containment, visible focus, reduced-motion support, and
 standalone theme fallbacks.
 
@@ -24,8 +24,12 @@ bun add @wornpage/layout-surfaces
 
 ```svelte
 <script>
-  import { Card, Container, Divider } from '@wornpage/layout-surfaces';
+  import { Card, Container, Divider, Panel } from '@wornpage/layout-surfaces';
 </script>
+
+<Panel sectionLabel="Delivery" heading="Launch readiness" headingLevel={2}>
+  <p>3 checks remaining.</p>
+</Panel>
 
 <Container label="Release" variant="tinted">
   <p>Version 2.4 is ready.</p>
@@ -53,6 +57,20 @@ document hierarchy. Unlabeled containers remain presentational.
 
 Slot: `children` (required content).
 
+## Panel
+
+Panel is a static section surface for grouped content. A heading names the
+section, and `headingLevel` lets the consumer preserve its document hierarchy.
+Labels, headings, and body content wrap without widening compact layouts.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `heading` | `string` | none | Visible heading and accessible section name |
+| `sectionLabel` | `string` | none | Short visible label above the heading |
+| `headingLevel` | `2 \| 3 \| 4 \| 5 \| 6` | `2` | Native heading level |
+
+Slot: `children` (optional content).
+
 ## Card
 
 Card renders an anchor when `href` is present and a neutral `div` otherwise.
@@ -79,6 +97,6 @@ visible label wraps between the rules without widening its parent.
 
 The components consume the existing `--cockpit-*` tokens with complete light
 fallbacks. Package-specific overrides use the `--worn-container-*`,
-`--worn-card-*`, and `--worn-divider-*` prefixes. Outer spacing remains
+`--worn-panel-*`, `--worn-card-*`, and `--worn-divider-*` prefixes. Outer spacing remains
 explicitly tokenized through `--worn-container-margin-block-end` and
 `--worn-divider-margin-block` so a parent layout can set either to `0`.

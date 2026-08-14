@@ -6,12 +6,13 @@ const read = (name: string) => readFileSync(new URL(`../src/${name}.svelte`, imp
 const container = read('Container');
 const card = read('Card');
 const divider = read('Divider');
+const panel = read('Panel');
 
 describe('@wornpage/layout-surfaces', () => {
 	it('declares one source-delivered v2 package', () => {
 		const pkg = require('../package.json');
 		expect(pkg.name).toBe('@wornpage/layout-surfaces');
-		expect(pkg.version).toBe('0.1.0');
+		expect(pkg.version).toBe('0.1.1');
 		expect(pkg.wornpage).toEqual({ contractVersion: 2, delivery: 'source' });
 		expect(pkg.main).toBe('./src/index.ts');
 		expect(pkg.files).not.toContain('dist');
@@ -19,11 +20,28 @@ describe('@wornpage/layout-surfaces', () => {
 
 	it('exports and compiles every layout surface without warnings', async () => {
 		const mod = await import('../src/index.ts');
-		expect(Object.keys(mod).sort()).toEqual(['Card', 'Container', 'Divider']);
-		for (const [name, source] of Object.entries({ Card: card, Container: container, Divider: divider })) {
+		expect(Object.keys(mod).sort()).toEqual(['Card', 'Container', 'Divider', 'Panel']);
+		for (const [name, source] of Object.entries({ Card: card, Container: container, Divider: divider, Panel: panel })) {
 			const result = compile(source, { filename: `${name}.svelte`, generate: 'client' });
 			expect(result.warnings).toHaveLength(0);
 		}
+	});
+
+	it('gives panels explicit section and heading ownership', () => {
+		expect(panel).toContain('const instanceId = $props.id();');
+		expect(panel).toContain("let rootTag = $derived(labelledBy ? 'section' : 'div');");
+		expect(panel).toContain('aria-labelledby={labelledBy}');
+		expect(panel).toContain('let headingTag = $derived(headingTags[headingLevel]);');
+		expect(panel).toContain('this={headingTag} class="worn-panel-title" id={headingId}');
+	});
+
+	it('stacks and contains panel headings, labels, and hostile body content', () => {
+		expect(panel).toMatch(/\.worn-panel \{[\s\S]*?box-sizing: border-box;[\s\S]*?max-inline-size: 100%;[\s\S]*?min-inline-size: 0;[\s\S]*?overflow-wrap: anywhere;/u);
+		expect(panel).toMatch(/\.worn-panel-head \{[\s\S]*?display: grid;/u);
+		expect(panel).toContain(':global(.worn-panel-body > *)');
+		expect(panel).toContain('var(--cockpit-surface, #ffffff)');
+		expect(panel).toContain('var(--cockpit-text, #1f2f28)');
+		expect(panel).toContain('var(--cockpit-text-muted, #506058)');
 	});
 
 	it('names labeled containers without imposing a heading level', () => {
