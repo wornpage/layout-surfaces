@@ -67,8 +67,8 @@
 	.worn-card::after {
 		content: '';
 		position: absolute;
-		top: -1px;
-		right: -1px;
+		top: 0;
+		right: 0;
 		z-index: 1;
 		inline-size: 12px;
 		block-size: 12px;

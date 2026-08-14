@@ -47,6 +47,9 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(card).toContain(':global(.worn-card > *)');
 		expect(card).not.toContain('overflow: hidden;');
 		expect(card).toContain('outline-offset: 2px;');
+		expect(card).toContain('top: 0;');
+		expect(card).toContain('right: 0;');
+		expect(card).not.toContain('right: -1px;');
 	});
 
 	it('removes all card transitions for reduced-motion users', () => {
