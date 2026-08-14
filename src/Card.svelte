@@ -66,6 +66,7 @@
 
 	.worn-card::after {
 		content: '';
+		box-sizing: border-box;
 		position: absolute;
 		top: 0;
 		right: 0;

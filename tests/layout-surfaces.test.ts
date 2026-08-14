@@ -49,6 +49,7 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(card).toContain('outline-offset: 2px;');
 		expect(card).toContain('top: 0;');
 		expect(card).toContain('right: 0;');
+		expect(card).toMatch(/\.worn-card::after \{[\s\S]*?box-sizing: border-box;/u);
 		expect(card).not.toContain('right: -1px;');
 	});
 
