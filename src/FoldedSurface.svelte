@@ -52,7 +52,9 @@
 	}
 
 	.worn-folded-surface[data-fold-reveal='always'] > .worn-folded-surface-ear,
-	.worn-folded-surface[data-fold-reveal='hover']:hover > .worn-folded-surface-ear {
+	.worn-folded-surface[data-fold-reveal='hover']:hover > .worn-folded-surface-ear,
+	.worn-folded-surface[data-fold-reveal='hover']:focus-visible > .worn-folded-surface-ear,
+	.worn-folded-surface[data-fold-reveal='hover']:focus-within > .worn-folded-surface-ear {
 		opacity: 1;
 	}
 

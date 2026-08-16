@@ -36,6 +36,8 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(foldedSurface).toContain('<span class="worn-folded-surface-ear" aria-hidden="true"></span>');
 		expect(foldedSurface).toMatch(/\.worn-folded-surface-ear \{[\s\S]*?block-size: var\(--worn-fold-size, 14px\);[\s\S]*?inline-size: var\(--worn-fold-size, 14px\);[\s\S]*?inset-block-start: 0;[\s\S]*?inset-inline-end: 0;[\s\S]*?pointer-events: none;/u);
 		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='hover']:hover > .worn-folded-surface-ear");
+		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='hover']:focus-visible > .worn-folded-surface-ear");
+		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='hover']:focus-within > .worn-folded-surface-ear");
 		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='always'] > .worn-folded-surface-ear");
 		expect(foldedSurface).toContain('var(--worn-fold-background, var(--cockpit-bg, #f8f6f0))');
 		expect(foldedSurface).toContain('var(--worn-fold-border, var(--cockpit-border, #d6d3cc))');
