@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import FoldIndicator from './FoldIndicator.svelte';
 
 	interface Props {
 		href?: string;
@@ -13,10 +14,12 @@
 {#if href}
 	<a class="worn-card" class:is-padded={padded} {href}>
 		{#if children}{@render children()}{/if}
+		<FoldIndicator variant="card" />
 	</a>
 {:else}
 	<div class="worn-card" class:is-padded={padded}>
 		{#if children}{@render children()}{/if}
+		<FoldIndicator variant="card" />
 	</div>
 {/if}
 
@@ -64,33 +67,8 @@
 		padding: var(--worn-card-padding, 18px 26px);
 	}
 
-	.worn-card::after {
-		content: '';
-		box-sizing: border-box;
-		position: absolute;
-		top: 0;
-		right: 0;
-		z-index: 1;
-		inline-size: 12px;
-		block-size: 12px;
-		pointer-events: none;
-		opacity: 0;
-		background: var(--worn-card-dog-ear-background, var(--cockpit-bg, #f8f6f0));
-		border: 1px solid var(--worn-card-dog-ear-border, var(--cockpit-border, #d6d3cc));
-		border-block-start: 0;
-		border-inline-end: 0;
-		border-radius: 0 0 0 3px;
-		transition: opacity 120ms ease;
-	}
-
-	a.worn-card:hover::after,
-	a.worn-card:focus-visible::after {
-		opacity: 1;
-	}
-
 	@media (prefers-reduced-motion: reduce) {
-		a.worn-card,
-		.worn-card::after {
+		a.worn-card {
 			transition: none;
 		}
 

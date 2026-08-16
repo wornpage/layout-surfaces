@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
+	import FoldIndicator from './FoldIndicator.svelte';
 
 	type SurfaceElement = 'article' | 'div' | 'section';
 	type FoldReveal = 'always' | 'hidden' | 'hover';
@@ -25,7 +26,7 @@
 
 <svelte:element this={as} {...rest} class={rootClass} data-fold-reveal={reveal}>
 	{#if children}{@render children()}{/if}
-	<span class="worn-folded-surface-ear" aria-hidden="true"></span>
+	<FoldIndicator variant="surface" />
 </svelte:element>
 
 <style>
@@ -33,34 +34,4 @@
 		position: relative;
 	}
 
-	.worn-folded-surface-ear {
-		background: var(--worn-fold-background, var(--cockpit-bg, #f8f6f0));
-		border: 1px solid var(--worn-fold-border, var(--cockpit-border, #d6d3cc));
-		border-block-start: 0;
-		border-inline-end: 0;
-		border-radius: 0 0 0 var(--worn-fold-radius, 4px);
-		block-size: var(--worn-fold-size, 14px);
-		box-sizing: border-box;
-		inline-size: var(--worn-fold-size, 14px);
-		inset-block-start: 0;
-		inset-inline-end: 0;
-		opacity: 0;
-		pointer-events: none;
-		position: absolute;
-		transition: opacity var(--worn-fold-duration, 120ms) ease;
-		z-index: var(--worn-fold-z-index, 1);
-	}
-
-	.worn-folded-surface[data-fold-reveal='always'] > .worn-folded-surface-ear,
-	.worn-folded-surface[data-fold-reveal='hover']:hover > .worn-folded-surface-ear,
-	.worn-folded-surface[data-fold-reveal='hover']:focus-visible > .worn-folded-surface-ear,
-	.worn-folded-surface[data-fold-reveal='hover']:focus-within > .worn-folded-surface-ear {
-		opacity: 1;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.worn-folded-surface-ear {
-			transition: none;
-		}
-	}
 </style>

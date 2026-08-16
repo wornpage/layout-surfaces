@@ -6,6 +6,7 @@ const read = (name: string) => readFileSync(new URL(`../src/${name}.svelte`, imp
 const container = read('Container');
 const card = read('Card');
 const divider = read('Divider');
+const foldIndicator = read('FoldIndicator');
 const foldedSurface = read('FoldedSurface');
 const panel = read('Panel');
 const resizable = read('Resizable');
@@ -23,7 +24,7 @@ describe('@wornpage/layout-surfaces', () => {
 	it('exports and compiles every layout surface without warnings', async () => {
 		const mod = await import('../src/index.ts');
 		expect(Object.keys(mod).sort()).toEqual(['Card', 'Container', 'Divider', 'FoldedSurface', 'Panel', 'Resizable']);
-		for (const [name, source] of Object.entries({ Card: card, Container: container, Divider: divider, FoldedSurface: foldedSurface, Panel: panel, Resizable: resizable })) {
+		for (const [name, source] of Object.entries({ Card: card, Container: container, Divider: divider, FoldIndicator: foldIndicator, FoldedSurface: foldedSurface, Panel: panel, Resizable: resizable })) {
 			const result = compile(source, { filename: `${name}.svelte`, generate: 'client' });
 			expect(result.warnings).toHaveLength(0);
 		}
@@ -33,15 +34,25 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(foldedSurface).toContain("type SurfaceElement = 'article' | 'div' | 'section';");
 		expect(foldedSurface).toContain("type FoldReveal = 'always' | 'hidden' | 'hover';");
 		expect(foldedSurface).toContain('<svelte:element this={as} {...rest} class={rootClass} data-fold-reveal={reveal}>');
-		expect(foldedSurface).toContain('<span class="worn-folded-surface-ear" aria-hidden="true"></span>');
-		expect(foldedSurface).toMatch(/\.worn-folded-surface-ear \{[\s\S]*?block-size: var\(--worn-fold-size, 14px\);[\s\S]*?inline-size: var\(--worn-fold-size, 14px\);[\s\S]*?inset-block-start: 0;[\s\S]*?inset-inline-end: 0;[\s\S]*?pointer-events: none;/u);
-		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='hover']:hover > .worn-folded-surface-ear");
-		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='hover']:focus-visible > .worn-folded-surface-ear");
-		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='hover']:focus-within > .worn-folded-surface-ear");
-		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='always'] > .worn-folded-surface-ear");
-		expect(foldedSurface).toContain('var(--worn-fold-background, var(--cockpit-bg, #f8f6f0))');
-		expect(foldedSurface).toContain('var(--worn-fold-border, var(--cockpit-border, #d6d3cc))');
-		expect(foldedSurface).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.worn-folded-surface-ear \{[\s\S]*?transition: none;/u);
+		expect(foldedSurface).toContain("import FoldIndicator from './FoldIndicator.svelte';");
+		expect(foldedSurface).toContain('<FoldIndicator variant="surface" />');
+		expect(foldedSurface).not.toContain('worn-folded-surface-ear');
+	});
+
+	it('centralizes both private dog-ear variants in one fold indicator', () => {
+		expect(card).toContain("import FoldIndicator from './FoldIndicator.svelte';");
+		expect(card).toContain('<FoldIndicator variant="card" />');
+		expect(card).not.toContain('::after');
+		expect(foldIndicator).toContain("type Variant = 'card' | 'surface';");
+		expect(foldIndicator).toContain('<span class="worn-fold-indicator" data-fold-variant={variant} aria-hidden="true"></span>');
+		expect(foldIndicator).toMatch(/\.worn-fold-indicator \{[\s\S]*?inset-block-start: 0;[\s\S]*?inset-inline-end: 0;[\s\S]*?pointer-events: none;/u);
+		expect(foldIndicator).toContain(".worn-fold-indicator[data-fold-variant='surface']");
+		expect(foldIndicator).toContain(".worn-fold-indicator[data-fold-variant='card']");
+		expect(foldIndicator).toContain(":global(.worn-folded-surface[data-fold-reveal='hover']:focus-within) > .worn-fold-indicator");
+		expect(foldIndicator).toContain(':global(a.worn-card:focus-visible) > .worn-fold-indicator');
+		expect(foldIndicator).toContain('var(--worn-fold-background, var(--cockpit-bg, #f8f6f0))');
+		expect(foldIndicator).toContain('var(--worn-card-dog-ear-background, var(--cockpit-bg, #f8f6f0))');
+		expect(foldIndicator).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.worn-fold-indicator \{[\s\S]*?transition: none;/u);
 	});
 
 	it('keeps static panels independent from optional fold behavior', () => {
@@ -88,15 +99,13 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(card).toContain(':global(.worn-card > *)');
 		expect(card).not.toContain('overflow: hidden;');
 		expect(card).toContain('outline-offset: 2px;');
-		expect(card).toContain('top: 0;');
-		expect(card).toContain('right: 0;');
-		expect(card).toMatch(/\.worn-card::after \{[\s\S]*?box-sizing: border-box;/u);
-		expect(card).not.toContain('right: -1px;');
+		expect(card).not.toContain('top: 0;');
+		expect(card).not.toContain('right: 0;');
 	});
 
 	it('removes all card transitions for reduced-motion users', () => {
 		expect(card).toContain('@media (prefers-reduced-motion: reduce)');
-		expect(card).toMatch(/a\.worn-card,\s*\.worn-card::after \{\s*transition: none;/u);
+		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?a\.worn-card \{[\s\S]*?transition: none;/u);
 		expect(card).toMatch(/a\.worn-card:hover,\s*a\.worn-card:focus-visible \{\s*transform: none;/u);
 	});
 
