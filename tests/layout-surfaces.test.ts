@@ -6,6 +6,7 @@ const read = (name: string) => readFileSync(new URL(`../src/${name}.svelte`, imp
 const container = read('Container');
 const card = read('Card');
 const divider = read('Divider');
+const foldedSurface = read('FoldedSurface');
 const panel = read('Panel');
 const resizable = read('Resizable');
 
@@ -13,7 +14,7 @@ describe('@wornpage/layout-surfaces', () => {
 	it('declares one source-delivered v2 package', () => {
 		const pkg = require('../package.json');
 		expect(pkg.name).toBe('@wornpage/layout-surfaces');
-		expect(pkg.version).toBe('0.1.2');
+		expect(pkg.version).toBe('0.2.0');
 		expect(pkg.wornpage).toEqual({ contractVersion: 2, delivery: 'source' });
 		expect(pkg.main).toBe('./src/index.ts');
 		expect(pkg.files).not.toContain('dist');
@@ -21,11 +22,30 @@ describe('@wornpage/layout-surfaces', () => {
 
 	it('exports and compiles every layout surface without warnings', async () => {
 		const mod = await import('../src/index.ts');
-		expect(Object.keys(mod).sort()).toEqual(['Card', 'Container', 'Divider', 'Panel', 'Resizable']);
-		for (const [name, source] of Object.entries({ Card: card, Container: container, Divider: divider, Panel: panel, Resizable: resizable })) {
+		expect(Object.keys(mod).sort()).toEqual(['Card', 'Container', 'Divider', 'FoldedSurface', 'Panel', 'Resizable']);
+		for (const [name, source] of Object.entries({ Card: card, Container: container, Divider: divider, FoldedSurface: foldedSurface, Panel: panel, Resizable: resizable })) {
 			const result = compile(source, { filename: `${name}.svelte`, generate: 'client' });
 			expect(result.warnings).toHaveLength(0);
 		}
+	});
+
+	it('owns an optional semantic paper-fold treatment', () => {
+		expect(foldedSurface).toContain("type SurfaceElement = 'article' | 'div' | 'section';");
+		expect(foldedSurface).toContain("type FoldReveal = 'always' | 'hidden' | 'hover';");
+		expect(foldedSurface).toContain('<svelte:element this={as} {...rest} class={rootClass} data-fold-reveal={reveal}>');
+		expect(foldedSurface).toContain('<span class="worn-folded-surface-ear" aria-hidden="true"></span>');
+		expect(foldedSurface).toMatch(/\.worn-folded-surface-ear \{[\s\S]*?block-size: var\(--worn-fold-size, 14px\);[\s\S]*?inline-size: var\(--worn-fold-size, 14px\);[\s\S]*?inset-block-start: 0;[\s\S]*?inset-inline-end: 0;[\s\S]*?pointer-events: none;/u);
+		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='hover']:hover > .worn-folded-surface-ear");
+		expect(foldedSurface).toContain(".worn-folded-surface[data-fold-reveal='always'] > .worn-folded-surface-ear");
+		expect(foldedSurface).toContain('var(--worn-fold-background, var(--cockpit-bg, #f8f6f0))');
+		expect(foldedSurface).toContain('var(--worn-fold-border, var(--cockpit-border, #d6d3cc))');
+		expect(foldedSurface).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.worn-folded-surface-ear \{[\s\S]*?transition: none;/u);
+	});
+
+	it('keeps static panels independent from optional fold behavior', () => {
+		expect(panel).not.toContain('FoldedSurface');
+		expect(panel).not.toContain('dog-ear');
+		expect(panel).not.toContain('data-fold-reveal');
 	});
 
 	it('gives panels explicit section and heading ownership', () => {

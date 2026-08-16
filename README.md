@@ -1,6 +1,6 @@
 # @wornpage/layout-surfaces
 
-Compact Svelte 5 panels, containers, cards, dividers, and resizable panes with named structure,
+Compact Svelte 5 panels, containers, cards, folded surfaces, dividers, and resizable panes with named structure,
 hostile-content containment, visible focus, reduced-motion support, and
 standalone theme fallbacks.
 
@@ -24,7 +24,7 @@ bun add @wornpage/layout-surfaces
 
 ```svelte
 <script>
-  import { Card, Container, Divider, Panel, Resizable } from '@wornpage/layout-surfaces';
+  import { Card, Container, Divider, FoldedSurface, Panel, Resizable } from '@wornpage/layout-surfaces';
 </script>
 
 <Panel sectionLabel="Delivery" heading="Launch readiness" headingLevel={2}>
@@ -39,6 +39,10 @@ bun add @wornpage/layout-surfaces
   <strong>Acme migration</strong>
   <p>Review due Friday.</p>
 </Card>
+
+<FoldedSurface as="section" reveal="hover" aria-label="Project status">
+  <p>Ready for review.</p>
+</FoldedSurface>
 
 <Divider label="Later" />
 
@@ -75,6 +79,22 @@ Labels, headings, and body content wrap without widening compact layouts.
 | `headingLevel` | `2 \| 3 \| 4 \| 5 \| 6` | `2` | Native heading level |
 
 Slot: `children` (optional content).
+
+## FoldedSurface
+
+FoldedSurface preserves the consumer's semantic root while owning the optional
+paper-fold treatment. Use it when the fold belongs to the surface itself;
+static `Panel` remains unchanged and does not gain hover behavior implicitly.
+The fold is decorative, ignores pointer input, uses logical corner properties,
+and removes its opacity transition for reduced-motion users.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `as` | `div \| section \| article` | `div` | Semantic root element |
+| `reveal` | `hover \| always \| hidden` | `hover` | Fold visibility behavior |
+
+Slot: `children` (optional content). Native attributes, ARIA attributes, and
+consumer classes are forwarded to the root.
 
 ## Card
 
@@ -125,7 +145,7 @@ Slots: `children` (resizable pane), `content` (remaining pane).
 
 The components consume the existing `--cockpit-*` tokens with complete light
 fallbacks. Package-specific overrides use the `--worn-container-*`,
-`--worn-panel-*`, `--worn-card-*`, `--worn-divider-*`, and
+`--worn-panel-*`, `--worn-card-*`, `--worn-fold-*`, `--worn-divider-*`, and
 `--worn-resizable-*` prefixes. Outer spacing remains
 explicitly tokenized through `--worn-container-margin-block-end` and
 `--worn-divider-margin-block` so a parent layout can set either to `0`.
