@@ -11,31 +11,33 @@ const foldedSurface = read('FoldedSurface');
 const panel = read('Panel');
 const resizable = read('Resizable');
 
-function expectFinePointerHover(source: string, hoverRule: string) {
-	const occurrences = [...source.matchAll(new RegExp(hoverRule.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'gu'))];
-	expect(occurrences).toHaveLength(1);
+function expectFinePointerHover(source: string, selector: string, expectedCount = 1) {
+	const occurrences = [...source.matchAll(new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'gu'))];
+	expect(occurrences).toHaveLength(expectedCount);
 
-	const index = occurrences[0]?.index ?? -1;
-	let mediaStart = source.lastIndexOf('@media (hover: hover) and (pointer: fine)', index);
-	let enclosed = false;
+	for (const occurrence of occurrences) {
+		const index = occurrence.index ?? -1;
+		let mediaStart = source.lastIndexOf('@media (hover: hover) and (pointer: fine)', index);
+		let enclosed = false;
 
-	while (mediaStart >= 0 && !enclosed) {
-		const blockStart = source.indexOf('{', mediaStart);
-		let depth = 0;
+		while (mediaStart >= 0 && !enclosed) {
+			const blockStart = source.indexOf('{', mediaStart);
+			let depth = 0;
 
-		for (let cursor = blockStart; cursor < source.length; cursor += 1) {
-			if (source[cursor] === '{') depth += 1;
-			if (source[cursor] === '}') depth -= 1;
-			if (depth === 0) {
-				enclosed = index > blockStart && index < cursor;
-				break;
+			for (let cursor = blockStart; cursor < source.length; cursor += 1) {
+				if (source[cursor] === '{') depth += 1;
+				if (source[cursor] === '}') depth -= 1;
+				if (depth === 0) {
+					enclosed = index > blockStart && index < cursor;
+					break;
+				}
 			}
+
+			mediaStart = source.lastIndexOf('@media (hover: hover) and (pointer: fine)', mediaStart - 1);
 		}
 
-		mediaStart = source.lastIndexOf('@media (hover: hover) and (pointer: fine)', mediaStart - 1);
+		expect(enclosed).toBe(true);
 	}
-
-	expect(enclosed).toBe(true);
 }
 
 describe('@wornpage/layout-surfaces', () => {
@@ -141,8 +143,9 @@ describe('@wornpage/layout-surfaces', () => {
 
 	it('limits linked-card hover elevation to fine pointers while retaining focus feedback', () => {
 		expect(card).toContain('a.worn-card:focus-visible {');
-		expectFinePointerHover(card, 'a.worn-card:hover {\n\t\t\tborder-color:');
-		expectFinePointerHover(card, 'a.worn-card:hover {\n\t\t\t\ttransform: none;');
+		expectFinePointerHover(card, 'a.worn-card:hover {', 2);
+		expect(card).toMatch(/@media \(hover: hover\) and \(pointer: fine\) \{\s*a\.worn-card:hover \{\s*border-color:[\s\S]*?box-shadow:[\s\S]*?transform: translateY\(-1px\);/u);
+		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?@media \(hover: hover\) and \(pointer: fine\) \{\s*a\.worn-card:hover \{\s*transform: none;/u);
 	});
 
 	it('removes card transitions for reduced-motion users without widening hover feedback', () => {
