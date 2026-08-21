@@ -228,11 +228,17 @@
     transition: background-color 0.15s ease, inline-size 0.15s ease;
   }
 
-  .worn-resizable-handle:hover::after,
   .worn-resizable-handle:focus-visible::after,
   .worn-resizable-handle.is-dragging::after {
     inline-size: 4px;
     background: var(--worn-resizable-active, var(--cockpit-accent, #0f766e));
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .worn-resizable-handle:hover::after {
+      inline-size: 4px;
+      background: var(--worn-resizable-active, var(--cockpit-accent, #0f766e));
+    }
   }
 
   .worn-resizable-handle:focus-visible {

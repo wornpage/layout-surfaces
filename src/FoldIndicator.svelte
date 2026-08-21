@@ -45,12 +45,17 @@
 	}
 
 	:global(.worn-folded-surface[data-fold-reveal='always']) > .worn-fold-indicator,
-	:global(.worn-folded-surface[data-fold-reveal='hover']:hover) > .worn-fold-indicator,
 	:global(.worn-folded-surface[data-fold-reveal='hover']:focus-visible) > .worn-fold-indicator,
 	:global(.worn-folded-surface[data-fold-reveal='hover']:focus-within) > .worn-fold-indicator,
-	:global(a.worn-card:hover) > .worn-fold-indicator,
 	:global(a.worn-card:focus-visible) > .worn-fold-indicator {
 		opacity: 1;
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		:global(.worn-folded-surface[data-fold-reveal='hover']:hover) > .worn-fold-indicator,
+		:global(a.worn-card:hover) > .worn-fold-indicator {
+			opacity: 1;
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {

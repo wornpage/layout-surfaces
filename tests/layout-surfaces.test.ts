@@ -11,6 +11,16 @@ const foldedSurface = read('FoldedSurface');
 const panel = read('Panel');
 const resizable = read('Resizable');
 
+function expectFinePointerHover(source: string, selector: string, topLevelClose: string) {
+	const occurrences = [...source.matchAll(new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'gu'))];
+	expect(occurrences.length).toBeGreaterThan(0);
+
+	for (const occurrence of occurrences) {
+		const index = occurrence.index ?? -1;
+		expect(source.lastIndexOf('@media (hover: hover) and (pointer: fine)', index)).toBeGreaterThan(source.lastIndexOf(topLevelClose, index));
+	}
+}
+
 describe('@wornpage/layout-surfaces', () => {
 	it('declares one source-delivered v2 package', () => {
 		const pkg = require('../package.json');
@@ -53,6 +63,15 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(foldIndicator).toContain('var(--worn-fold-background, var(--cockpit-bg, #f8f6f0))');
 		expect(foldIndicator).toContain('var(--worn-card-dog-ear-background, var(--cockpit-bg, #f8f6f0))');
 		expect(foldIndicator).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.worn-fold-indicator \{[\s\S]*?transition: none;/u);
+	});
+
+	it('limits hover-only fold reveals to fine pointers while retaining keyboard reveals', () => {
+		expect(foldIndicator).toContain(":global(.worn-folded-surface[data-fold-reveal='always']) > .worn-fold-indicator");
+		expect(foldIndicator).toContain(":global(.worn-folded-surface[data-fold-reveal='hover']:focus-visible) > .worn-fold-indicator");
+		expect(foldIndicator).toContain(":global(.worn-folded-surface[data-fold-reveal='hover']:focus-within) > .worn-fold-indicator");
+		expect(foldIndicator).toContain(':global(a.worn-card:focus-visible) > .worn-fold-indicator');
+		expectFinePointerHover(foldIndicator, ":global(.worn-folded-surface[data-fold-reveal='hover']:hover) > .worn-fold-indicator", '\n\t}');
+		expectFinePointerHover(foldIndicator, ':global(a.worn-card:hover) > .worn-fold-indicator', '\n\t}');
 	});
 
 	it('keeps static panels independent from optional fold behavior', () => {
@@ -103,10 +122,16 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(card).not.toContain('right: 0;');
 	});
 
-	it('removes all card transitions for reduced-motion users', () => {
+	it('limits linked-card hover elevation to fine pointers while retaining focus feedback', () => {
+		expect(card).toContain('a.worn-card:focus-visible {');
+		expectFinePointerHover(card, 'a.worn-card:hover {', '\n\t}');
+	});
+
+	it('removes card transitions for reduced-motion users without widening hover feedback', () => {
 		expect(card).toContain('@media (prefers-reduced-motion: reduce)');
 		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?a\.worn-card \{[\s\S]*?transition: none;/u);
-		expect(card).toMatch(/a\.worn-card:hover,\s*a\.worn-card:focus-visible \{\s*transform: none;/u);
+		expect(card).toContain('a.worn-card:focus-visible {\n\t\t\ttransform: none;');
+		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?@media \(hover: hover\) and \(pointer: fine\) \{[\s\S]*?a\.worn-card:hover \{\s*transform: none;/u);
 	});
 
 	it('exposes both divider forms as separators and contains long labels', () => {
@@ -142,5 +167,11 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(resizable).toContain('var(--cockpit-accent, #0f766e)');
 		expect(resizable).toContain('inset-inline: -16px;');
 		expect(resizable).toContain('@media (prefers-reduced-motion: reduce)');
+	});
+
+	it('limits splitter hover feedback to fine pointers while retaining focus and drag feedback', () => {
+		expect(resizable).toContain('.worn-resizable-handle:focus-visible::after,');
+		expect(resizable).toContain('.worn-resizable-handle.is-dragging::after {');
+		expectFinePointerHover(resizable, '.worn-resizable-handle:hover::after {', '\n  }');
 	});
 });
