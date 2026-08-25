@@ -102,6 +102,9 @@ Card renders an anchor when `href` is present and a neutral `div` otherwise.
 Linked cards retain native link behavior and visible focus. Content wraps
 inside the card instead of being clipped.
 
+Stable border and shadow feedback does not move the linked Card on keyboard
+focus or fine-pointer hover. Reduced motion disables those transitions.
+
 Linked-card focus uses `--worn-card-focus`, then `--cockpit-focus`,
 `--cockpit-text`, and `currentColor` as progressively broader fallbacks.
 
