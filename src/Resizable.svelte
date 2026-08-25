@@ -242,7 +242,7 @@
   }
 
   .worn-resizable-handle:focus-visible {
-    outline: 2px dashed var(--worn-resizable-focus, var(--cockpit-accent, #0f766e));
+    outline: 2px dashed var(--worn-resizable-focus, var(--cockpit-focus, var(--cockpit-text, currentColor)));
     outline-offset: -2px;
   }
 

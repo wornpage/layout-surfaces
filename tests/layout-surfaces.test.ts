@@ -45,7 +45,7 @@ describe('@wornpage/layout-surfaces', () => {
 	it('declares one source-delivered v2 package', () => {
 		const pkg = require('../package.json');
 		expect(pkg.name).toBe('@wornpage/layout-surfaces');
-		expect(pkg.version).toBe('0.2.1');
+		expect(pkg.version).toBe('0.2.2');
 		expect(pkg.wornpage).toEqual({ contractVersion: 2, delivery: 'source' });
 		expect(pkg.main).toBe('./src/index.ts');
 		expect(pkg.files).not.toContain('dist');
@@ -196,6 +196,13 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(resizable).toContain('var(--cockpit-accent, #0f766e)');
 		expect(resizable).toContain('inset-inline: -16px;');
 		expect(resizable).toContain('@media (prefers-reduced-motion: reduce)');
+	});
+
+	it('gives the splitter a public theme-safe focus token', () => {
+		const focusRule = resizable.match(/\.worn-resizable-handle:focus-visible \{[\s\S]*?\}/gu)?.find((rule) => rule.includes('outline:')) ?? '';
+		expect(focusRule).toContain('outline: 2px dashed var(--worn-resizable-focus, var(--cockpit-focus, var(--cockpit-text, currentColor)));');
+		expect(focusRule).not.toContain('--cockpit-accent');
+		expect(readme).toContain('`--worn-resizable-focus`');
 	});
 
 	it('limits splitter hover feedback to fine pointers while retaining focus and drag feedback', () => {

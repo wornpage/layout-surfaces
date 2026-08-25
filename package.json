@@ -1,6 +1,6 @@
 {
   "name": "@wornpage/layout-surfaces",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Svelte 5 panels, containers, cards, folded surfaces, dividers, and resizable panes for compact application layouts",
   "type": "module",
   "wornpage": {
