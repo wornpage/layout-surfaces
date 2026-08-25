@@ -134,6 +134,9 @@ tracks can still shrink in a compact parent so neither pane widens the page.
 `side="end"` places the resizable pane at the visual end and reverses the arrow
 direction accordingly.
 
+Separator focus uses `--worn-resizable-focus`, then `--cockpit-focus`,
+`--cockpit-text`, and `currentColor` as progressively broader fallbacks.
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `initialSize` | `number` | `280` | Initial pane width, snapped and clamped |
