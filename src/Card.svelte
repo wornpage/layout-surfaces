@@ -48,20 +48,18 @@
 	}
 
 	a.worn-card {
-		transition: border-color 120ms ease, box-shadow 120ms ease, transform 100ms ease;
+		transition: border-color 120ms ease, box-shadow 120ms ease;
 	}
 
 	a.worn-card:focus-visible {
 		border-color: var(--worn-card-active-border, var(--cockpit-border, #d6d3cc));
 		box-shadow: var(--worn-card-active-shadow, var(--cockpit-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08)));
-		transform: translateY(-1px);
 	}
 
 	@media (hover: hover) and (pointer: fine) {
 		a.worn-card:hover {
 			border-color: var(--worn-card-active-border, var(--cockpit-border, #d6d3cc));
 			box-shadow: var(--worn-card-active-shadow, var(--cockpit-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08)));
-			transform: translateY(-1px);
 		}
 	}
 
@@ -77,16 +75,6 @@
 	@media (prefers-reduced-motion: reduce) {
 		a.worn-card {
 			transition: none;
-		}
-
-		a.worn-card:focus-visible {
-			transform: none;
-		}
-
-		@media (hover: hover) and (pointer: fine) {
-			a.worn-card:hover {
-				transform: none;
-			}
 		}
 	}
 </style>

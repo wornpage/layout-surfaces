@@ -45,7 +45,7 @@ describe('@wornpage/layout-surfaces', () => {
 	it('declares one source-delivered v2 package', () => {
 		const pkg = require('../package.json');
 		expect(pkg.name).toBe('@wornpage/layout-surfaces');
-		expect(pkg.version).toBe('0.2.2');
+		expect(pkg.version).toBe('0.2.3');
 		expect(pkg.wornpage).toEqual({ contractVersion: 2, delivery: 'source' });
 		expect(pkg.main).toBe('./src/index.ts');
 		expect(pkg.files).not.toContain('dist');
@@ -142,18 +142,24 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(card).not.toContain('right: 0;');
 	});
 
-	it('limits linked-card hover elevation to fine pointers while retaining focus feedback', () => {
-		expect(card).toContain('a.worn-card:focus-visible {');
-		expectFinePointerHover(card, 'a.worn-card:hover {', 2);
-		expect(card).toMatch(/@media \(hover: hover\) and \(pointer: fine\) \{\s*a\.worn-card:hover \{\s*border-color:[\s\S]*?box-shadow:[\s\S]*?transform: translateY\(-1px\);/u);
-		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?@media \(hover: hover\) and \(pointer: fine\) \{\s*a\.worn-card:hover \{\s*transform: none;/u);
+	it('keeps linked-card focus and fine-pointer hover feedback geometrically stable', () => {
+		const focusRule = card.match(/a\.worn-card:focus-visible \{[\s\S]*?\}/u)?.[0] ?? '';
+		const hoverRule = card.match(/@media \(hover: hover\) and \(pointer: fine\) \{\s*a\.worn-card:hover \{[\s\S]*?\}\s*\}/u)?.[0] ?? '';
+		expectFinePointerHover(card, 'a.worn-card:hover {', 1);
+		for (const rule of [focusRule, hoverRule]) {
+			expect(rule).toContain('border-color: var(--worn-card-active-border');
+			expect(rule).toContain('box-shadow: var(--worn-card-active-shadow');
+			expect(rule).not.toContain('transform');
+		}
+		expect(card).toContain('transition: border-color 120ms ease, box-shadow 120ms ease;');
+		expect(card).not.toContain('translateY');
+		expect(readme).toContain('Stable border and shadow feedback does not move the linked Card');
 	});
 
 	it('removes card transitions for reduced-motion users without widening hover feedback', () => {
 		expect(card).toContain('@media (prefers-reduced-motion: reduce)');
 		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?a\.worn-card \{[\s\S]*?transition: none;/u);
-		expect(card).toContain('a.worn-card:focus-visible {\n\t\t\ttransform: none;');
-		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?@media \(hover: hover\) and \(pointer: fine\) \{[\s\S]*?a\.worn-card:hover \{\s*transform: none;/u);
+		expect(card).not.toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?a\.worn-card:(?:focus-visible|hover)/u);
 	});
 
 	it('gives linked cards a public theme-safe focus token', () => {
