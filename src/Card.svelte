@@ -66,7 +66,7 @@
 	}
 
 	a.worn-card:focus-visible {
-		outline: 2px solid var(--worn-card-focus, var(--cockpit-accent, #287f73));
+		outline: 2px solid var(--worn-card-focus, var(--cockpit-focus, var(--cockpit-text, currentColor)));
 		outline-offset: 2px;
 	}
 

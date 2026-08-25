@@ -10,6 +10,7 @@ const foldIndicator = read('FoldIndicator');
 const foldedSurface = read('FoldedSurface');
 const panel = read('Panel');
 const resizable = read('Resizable');
+const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
 
 function expectFinePointerHover(source: string, selector: string, expectedCount = 1) {
 	const occurrences = [...source.matchAll(new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'gu'))];
@@ -44,7 +45,7 @@ describe('@wornpage/layout-surfaces', () => {
 	it('declares one source-delivered v2 package', () => {
 		const pkg = require('../package.json');
 		expect(pkg.name).toBe('@wornpage/layout-surfaces');
-		expect(pkg.version).toBe('0.2.0');
+		expect(pkg.version).toBe('0.2.1');
 		expect(pkg.wornpage).toEqual({ contractVersion: 2, delivery: 'source' });
 		expect(pkg.main).toBe('./src/index.ts');
 		expect(pkg.files).not.toContain('dist');
@@ -153,6 +154,13 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?a\.worn-card \{[\s\S]*?transition: none;/u);
 		expect(card).toContain('a.worn-card:focus-visible {\n\t\t\ttransform: none;');
 		expect(card).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?@media \(hover: hover\) and \(pointer: fine\) \{[\s\S]*?a\.worn-card:hover \{\s*transform: none;/u);
+	});
+
+	it('gives linked cards a public theme-safe focus token', () => {
+		const focusRule = card.match(/a\.worn-card:focus-visible \{[\s\S]*?\}/gu)?.find((rule) => rule.includes('outline:')) ?? '';
+		expect(focusRule).toContain('outline: 2px solid var(--worn-card-focus, var(--cockpit-focus, var(--cockpit-text, currentColor)));');
+		expect(focusRule).not.toContain('--cockpit-accent');
+		expect(readme).toContain('`--worn-card-focus`');
 	});
 
 	it('exposes both divider forms as separators and contains long labels', () => {

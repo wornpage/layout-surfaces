@@ -102,6 +102,9 @@ Card renders an anchor when `href` is present and a neutral `div` otherwise.
 Linked cards retain native link behavior and visible focus. Content wraps
 inside the card instead of being clipped.
 
+Linked-card focus uses `--worn-card-focus`, then `--cockpit-focus`,
+`--cockpit-text`, and `currentColor` as progressively broader fallbacks.
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `href` | `string` | none | Render as a native link |
