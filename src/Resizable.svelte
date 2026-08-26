@@ -150,7 +150,7 @@
     min-inline-size: 0;
     block-size: 100%;
     overflow: hidden;
-    color: var(--worn-resizable-color, var(--cockpit-text, #1f2f28));
+    color: var(--worn-resizable-color, var(--worn-text, #1f2f28));
   }
 
   .worn-resizable.is-end {
@@ -224,25 +224,25 @@
     inset-inline-start: 50%;
     inline-size: 2px;
     translate: -50% 0;
-    background: var(--worn-resizable-rail, var(--cockpit-border-strong, #b8b0a5));
+    background: var(--worn-resizable-rail, var(--worn-border-strong, #b8b0a5));
     transition: background-color 0.15s ease, inline-size 0.15s ease;
   }
 
   .worn-resizable-handle:focus-visible::after,
   .worn-resizable-handle.is-dragging::after {
     inline-size: 4px;
-    background: var(--worn-resizable-active, var(--cockpit-accent, #0f766e));
+    background: var(--worn-resizable-active, var(--worn-accent, #0f766e));
   }
 
   @media (hover: hover) and (pointer: fine) {
     .worn-resizable-handle:hover::after {
       inline-size: 4px;
-      background: var(--worn-resizable-active, var(--cockpit-accent, #0f766e));
+      background: var(--worn-resizable-active, var(--worn-accent, #0f766e));
     }
   }
 
   .worn-resizable-handle:focus-visible {
-    outline: 2px dashed var(--worn-resizable-focus, var(--cockpit-focus, var(--cockpit-text, currentColor)));
+    outline: 2px dashed var(--worn-resizable-focus, var(--worn-focus, var(--worn-text, currentColor)));
     outline-offset: -2px;
   }
 

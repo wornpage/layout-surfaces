@@ -39,14 +39,14 @@
 		display: block;
 		block-size: 0;
 		border: 0;
-		border-block-start: 1px solid var(--worn-divider-color, var(--cockpit-border, #d6d3cc));
+		border-block-start: 1px solid var(--worn-divider-color, var(--worn-border, #d6d3cc));
 	}
 
 	.worn-divider-line {
 		flex: 1 1 24px;
 		min-inline-size: 8px;
 		block-size: 1px;
-		background: var(--worn-divider-color, var(--cockpit-border, #d6d3cc));
+		background: var(--worn-divider-color, var(--worn-border, #d6d3cc));
 	}
 
 	.worn-divider-label {
@@ -61,6 +61,6 @@
 		line-height: 1.35;
 		text-transform: uppercase;
 		letter-spacing: 0;
-		color: var(--worn-divider-label-color, var(--cockpit-text-muted, #506058));
+		color: var(--worn-divider-label-color, var(--worn-text-muted, #506058));
 	}
 </style>

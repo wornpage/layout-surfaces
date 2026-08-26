@@ -21,8 +21,8 @@
 	}
 
 	.worn-fold-indicator[data-fold-variant='surface'] {
-		background: var(--worn-fold-background, var(--cockpit-bg, #f8f6f0));
-		border: 1px solid var(--worn-fold-border, var(--cockpit-border, #d6d3cc));
+		background: var(--worn-fold-background, var(--worn-bg, #f8f6f0));
+		border: 1px solid var(--worn-fold-border, var(--worn-border, #d6d3cc));
 		border-block-start: 0;
 		border-inline-end: 0;
 		border-radius: 0 0 0 var(--worn-fold-radius, 4px);
@@ -33,8 +33,8 @@
 	}
 
 	.worn-fold-indicator[data-fold-variant='card'] {
-		background: var(--worn-card-dog-ear-background, var(--cockpit-bg, #f8f6f0));
-		border: 1px solid var(--worn-card-dog-ear-border, var(--cockpit-border, #d6d3cc));
+		background: var(--worn-card-dog-ear-background, var(--worn-bg, #f8f6f0));
+		border: 1px solid var(--worn-card-dog-ear-border, var(--worn-border, #d6d3cc));
 		border-block-start: 0;
 		border-inline-end: 0;
 		border-radius: 0 0 0 3px;

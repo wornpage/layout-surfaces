@@ -105,8 +105,8 @@ inside the card instead of being clipped.
 Stable border and shadow feedback does not move the linked Card on keyboard
 focus or fine-pointer hover. Reduced motion disables those transitions.
 
-Linked-card focus uses `--worn-card-focus`, then `--cockpit-focus`,
-`--cockpit-text`, and `currentColor` as progressively broader fallbacks.
+Linked-card focus uses `--worn-card-focus`, then `--worn-focus`,
+`--worn-text`, and `currentColor` as progressively broader fallbacks.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -137,8 +137,8 @@ tracks can still shrink in a compact parent so neither pane widens the page.
 `side="end"` places the resizable pane at the visual end and reverses the arrow
 direction accordingly.
 
-Separator focus uses `--worn-resizable-focus`, then `--cockpit-focus`,
-`--cockpit-text`, and `currentColor` as progressively broader fallbacks.
+Separator focus uses `--worn-resizable-focus`, then `--worn-focus`,
+`--worn-text`, and `currentColor` as progressively broader fallbacks.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -152,7 +152,7 @@ Slots: `children` (resizable pane), `content` (remaining pane).
 
 ## Theme tokens
 
-The components consume the existing `--cockpit-*` tokens with complete light
+The components consume the existing `--worn-*` tokens with complete light
 fallbacks. Package-specific overrides use the `--worn-container-*`,
 `--worn-panel-*`, `--worn-card-*`, `--worn-fold-*`, `--worn-divider-*`, and
 `--worn-resizable-*` prefixes. Outer spacing remains

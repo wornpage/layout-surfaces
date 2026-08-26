@@ -49,11 +49,11 @@
 		padding: var(--worn-panel-padding, 14px);
 		overflow: visible;
 		overflow-wrap: anywhere;
-		background: var(--worn-panel-background, var(--cockpit-surface, #ffffff));
+		background: var(--worn-panel-background, var(--worn-surface, #ffffff));
 		border: 1px solid var(--worn-panel-border, transparent);
-		border-radius: var(--worn-panel-radius, var(--cockpit-radius, 6px));
-		box-shadow: var(--worn-panel-shadow, var(--cockpit-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08)));
-		color: var(--worn-panel-color, var(--cockpit-text, #1f2f28));
+		border-radius: var(--worn-panel-radius, var(--worn-radius, 6px));
+		box-shadow: var(--worn-panel-shadow, var(--worn-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08)));
+		color: var(--worn-panel-color, var(--worn-text, #1f2f28));
 	}
 
 	.worn-panel-head,
@@ -85,7 +85,7 @@
 		font-weight: 560;
 		line-height: 1.35;
 		letter-spacing: 0;
-		color: var(--worn-panel-label-color, var(--cockpit-text-muted, #506058));
+		color: var(--worn-panel-label-color, var(--worn-text-muted, #506058));
 	}
 
 	.worn-panel-title {
@@ -95,7 +95,7 @@
 		font-weight: 680;
 		line-height: 1.08;
 		letter-spacing: 0;
-		color: var(--worn-panel-heading-color, var(--cockpit-text, #1f2f28));
+		color: var(--worn-panel-heading-color, var(--worn-text, #1f2f28));
 	}
 
 	.worn-panel-body {

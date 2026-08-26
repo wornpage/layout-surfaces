@@ -40,13 +40,13 @@
 		padding: var(--worn-container-padding, 16px);
 		overflow: visible;
 		overflow-wrap: anywhere;
-		background: var(--worn-container-background, var(--cockpit-surface, #ffffff));
+		background: var(--worn-container-background, var(--worn-surface, #ffffff));
 		background: var(
 			--worn-container-background,
-			color-mix(in srgb, var(--cockpit-surface, #ffffff) 92%, var(--cockpit-bg, #f8f6f0) 8%)
+			color-mix(in srgb, var(--worn-surface, #ffffff) 92%, var(--worn-bg, #f8f6f0) 8%)
 		);
-		border: 1px solid var(--worn-container-border, var(--cockpit-border, #d6d3cc));
-		border-radius: var(--worn-container-radius, var(--cockpit-radius, 6px));
+		border: 1px solid var(--worn-container-border, var(--worn-border, #d6d3cc));
+		border-radius: var(--worn-container-radius, var(--worn-radius, 6px));
 	}
 
 	:global(.worn-container > *) {
@@ -55,27 +55,27 @@
 	}
 
 	.worn-container.is-tinted {
-		background: var(--worn-container-tinted-background, var(--cockpit-bg, #f8f6f0));
+		background: var(--worn-container-tinted-background, var(--worn-bg, #f8f6f0));
 		background: var(
 			--worn-container-tinted-background,
-			color-mix(in srgb, var(--cockpit-accent, #287f73) 4%, var(--cockpit-bg, #f8f6f0))
+			color-mix(in srgb, var(--worn-accent, #287f73) 4%, var(--worn-bg, #f8f6f0))
 		);
-		border-color: var(--worn-container-tinted-border, var(--cockpit-accent, #287f73));
+		border-color: var(--worn-container-tinted-border, var(--worn-accent, #287f73));
 		box-shadow: var(
 			--worn-container-tinted-shadow,
-			0 0 0 1px var(--cockpit-accent-50, rgba(40, 127, 115, 0.22))
+			0 0 0 1px var(--worn-accent-50, rgba(40, 127, 115, 0.22))
 		);
 	}
 
 	.worn-container.is-bare {
-		background: var(--worn-container-bare-background, var(--cockpit-bg, #f8f6f0));
-		border-color: var(--worn-container-border, var(--cockpit-border, #d6d3cc));
+		background: var(--worn-container-bare-background, var(--worn-bg, #f8f6f0));
+		border-color: var(--worn-container-border, var(--worn-border, #d6d3cc));
 	}
 
 	.worn-container.is-dashed {
-		background: var(--worn-container-dashed-background, var(--cockpit-bg, #f8f6f0));
+		background: var(--worn-container-dashed-background, var(--worn-bg, #f8f6f0));
 		border-style: dashed;
-		border-color: var(--worn-container-dashed-border, var(--cockpit-border-strong, #9ca49f));
+		border-color: var(--worn-container-dashed-border, var(--worn-border-strong, #9ca49f));
 	}
 
 	.worn-container.is-borderless {
@@ -96,6 +96,6 @@
 		line-height: 1.35;
 		text-transform: uppercase;
 		letter-spacing: 0;
-		color: var(--worn-container-label-color, var(--cockpit-text-muted, #506058));
+		color: var(--worn-container-label-color, var(--worn-text-muted, #506058));
 	}
 </style>

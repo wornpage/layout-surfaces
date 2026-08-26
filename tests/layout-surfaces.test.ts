@@ -80,8 +80,8 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(foldIndicator).toContain(".worn-fold-indicator[data-fold-variant='card']");
 		expect(foldIndicator).toContain(":global(.worn-folded-surface[data-fold-reveal='hover']:focus-within) > .worn-fold-indicator");
 		expect(foldIndicator).toContain(':global(a.worn-card:focus-visible) > .worn-fold-indicator');
-		expect(foldIndicator).toContain('var(--worn-fold-background, var(--cockpit-bg, #f8f6f0))');
-		expect(foldIndicator).toContain('var(--worn-card-dog-ear-background, var(--cockpit-bg, #f8f6f0))');
+		expect(foldIndicator).toContain('var(--worn-fold-background, var(--worn-bg, #f8f6f0))');
+		expect(foldIndicator).toContain('var(--worn-card-dog-ear-background, var(--worn-bg, #f8f6f0))');
 		expect(foldIndicator).toMatch(/@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.worn-fold-indicator \{[\s\S]*?transition: none;/u);
 	});
 
@@ -112,9 +112,9 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(panel).toMatch(/\.worn-panel \{[\s\S]*?box-sizing: border-box;[\s\S]*?max-inline-size: 100%;[\s\S]*?min-inline-size: 0;[\s\S]*?overflow-wrap: anywhere;/u);
 		expect(panel).toMatch(/\.worn-panel-head \{[\s\S]*?display: grid;/u);
 		expect(panel).toContain(':global(.worn-panel-body > *)');
-		expect(panel).toContain('var(--cockpit-surface, #ffffff)');
-		expect(panel).toContain('var(--cockpit-text, #1f2f28)');
-		expect(panel).toContain('var(--cockpit-text-muted, #506058)');
+		expect(panel).toContain('var(--worn-surface, #ffffff)');
+		expect(panel).toContain('var(--worn-text, #1f2f28)');
+		expect(panel).toContain('var(--worn-text-muted, #506058)');
 	});
 
 	it('names labeled containers without imposing a heading level', () => {
@@ -128,7 +128,7 @@ describe('@wornpage/layout-surfaces', () => {
 	it('contains hostile container content and supplies standalone theme fallbacks', () => {
 		expect(container).toMatch(/\.worn-container \{[\s\S]*?box-sizing: border-box;[\s\S]*?max-inline-size: 100%;[\s\S]*?min-inline-size: 0;[\s\S]*?overflow-wrap: anywhere;/u);
 		expect(container).toContain(':global(.worn-container > *)');
-		expect(container).toContain('var(--cockpit-surface, #ffffff)');
+		expect(container).toContain('var(--worn-surface, #ffffff)');
 		expect(container).toContain('--worn-container-margin-block-end');
 	});
 
@@ -164,8 +164,8 @@ describe('@wornpage/layout-surfaces', () => {
 
 	it('gives linked cards a public theme-safe focus token', () => {
 		const focusRule = card.match(/a\.worn-card:focus-visible \{[\s\S]*?\}/gu)?.find((rule) => rule.includes('outline:')) ?? '';
-		expect(focusRule).toContain('outline: 2px solid var(--worn-card-focus, var(--cockpit-focus, var(--cockpit-text, currentColor)));');
-		expect(focusRule).not.toContain('--cockpit-accent');
+		expect(focusRule).toContain('outline: 2px solid var(--worn-card-focus, var(--worn-focus, var(--worn-text, currentColor)));');
+		expect(focusRule).not.toContain('--worn-accent');
 		expect(readme).toContain('`--worn-card-focus`');
 	});
 
@@ -198,16 +198,16 @@ describe('@wornpage/layout-surfaces', () => {
 		expect(resizable).toContain('max-inline-size: 100%;');
 		expect(resizable).toContain('minmax(0, var(--worn-resizable-pane-size))');
 		expect(resizable).toContain('overflow-wrap: anywhere;');
-		expect(resizable).toContain('var(--cockpit-border-strong, #b8b0a5)');
-		expect(resizable).toContain('var(--cockpit-accent, #0f766e)');
+		expect(resizable).toContain('var(--worn-border-strong, #b8b0a5)');
+		expect(resizable).toContain('var(--worn-accent, #0f766e)');
 		expect(resizable).toContain('inset-inline: -16px;');
 		expect(resizable).toContain('@media (prefers-reduced-motion: reduce)');
 	});
 
 	it('gives the splitter a public theme-safe focus token', () => {
 		const focusRule = resizable.match(/\.worn-resizable-handle:focus-visible \{[\s\S]*?\}/gu)?.find((rule) => rule.includes('outline:')) ?? '';
-		expect(focusRule).toContain('outline: 2px dashed var(--worn-resizable-focus, var(--cockpit-focus, var(--cockpit-text, currentColor)));');
-		expect(focusRule).not.toContain('--cockpit-accent');
+		expect(focusRule).toContain('outline: 2px dashed var(--worn-resizable-focus, var(--worn-focus, var(--worn-text, currentColor)));');
+		expect(focusRule).not.toContain('--worn-accent');
 		expect(readme).toContain('`--worn-resizable-focus`');
 	});
 
