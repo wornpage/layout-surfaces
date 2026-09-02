@@ -7,18 +7,19 @@ standalone theme fallbacks.
 <!-- wornpage-delivery:v2 source -->
 ## Delivery
 
-`src/` is the canonical implementation and published runtime. This package is source-only; it does not ship a generated `dist/` directory.
+`src/` is the canonical implementation and package runtime. This package is source-only; it does not ship a generated `dist/` directory.
 
 Repository text is checked out as LF through `.gitattributes`, so generated output is byte-stable across Windows and Linux.
 
 The shared [component delivery contract](https://github.com/wornpage/cli/blob/master/docs/component-delivery.md) checks this declaration, package exports, packed files, and generated output on every push and pull request.
 <!-- /wornpage-delivery -->
 
-## Install
+## Source use
 
-```sh
-bun add @wornpage/layout-surfaces
-```
+This package is not published to npm. Check out this repository at a reviewed commit, install its
+dependencies from `bun.lock`, and consume `src/index.ts` through a local workspace alias. The
+`@wornpage/layout-surfaces` imports below assume that local alias; they do not resolve from the
+public npm registry.
 
 ## Usage
 
@@ -102,6 +103,10 @@ Card renders an anchor when `href` is present and a neutral `div` otherwise.
 Linked cards retain native link behavior and visible focus. Content wraps
 inside the card instead of being clipped.
 
+Card destinations may be relative or use `https:`, `mailto:`, or `tel:`. Empty values, network-path
+references, backslashes, separator/control/format characters, plain HTTP, and every other scheme
+are rejected with a `TypeError`; omit `href` to render a neutral `div`.
+
 Stable border and shadow feedback does not move the linked Card on keyboard
 focus or fine-pointer hover. Reduced motion disables those transitions.
 
@@ -110,7 +115,7 @@ Linked-card focus uses `--worn-card-focus`, then `--worn-focus`,
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `href` | `string` | none | Render as a native link |
+| `href` | `string` | none | Render as a validated native link |
 | `padded` | `boolean` | `true` | Apply the default inner padding |
 
 Slot: `children` (optional content).

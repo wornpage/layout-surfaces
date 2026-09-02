@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import FoldIndicator from './FoldIndicator.svelte';
+	import { assertSafeHref } from './safe-href';
 
 	interface Props {
 		href?: string;
@@ -9,10 +10,11 @@
 	}
 
 	let { href, padded = true, children }: Props = $props();
+	const safeHref = $derived(href === undefined ? undefined : assertSafeHref(href));
 </script>
 
-{#if href}
-	<a class="worn-card" class:is-padded={padded} {href}>
+{#if safeHref}
+	<a class="worn-card" class:is-padded={padded} href={safeHref}>
 		{#if children}{@render children()}{/if}
 		<FoldIndicator variant="card" />
 	</a>
