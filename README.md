@@ -1,5 +1,8 @@
 # @wornpage/layout-surfaces
 
+> Part of **[Wornpage Components](https://github.com/wornpage/wornpage#component-library)**.
+> [Browse the catalog](https://wornpage.pages.dev) · [Setup guide](https://github.com/wornpage/wornpage/blob/main/docs/getting-started.md) · [Wornpage overview](https://github.com/wornpage/wornpage)
+
 Compact Svelte 5 panels, containers, cards, folded surfaces, dividers, and resizable panes with named structure,
 hostile-content containment, visible focus, reduced-motion support, and
 standalone theme fallbacks.
